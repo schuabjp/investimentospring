@@ -17,9 +17,13 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void createUser(CreateUserDto createUserDto) {
-        //Primeiro é necessário converter DTO -> Entity
-        var entity = new User(UUID.randomUUID(), createUserDto.username(), createUserDto.email(), createUserDto.password(), Instant.now(), null);
-        userRepository.save(entity);
+    public UUID createUser(CreateUserDto createUserDto) {
+        var entity = new User();
+        entity.setUsername(createUserDto.username());
+        entity.setEmail(createUserDto.email());
+        entity.setPassword(createUserDto.password());
+
+        var userSaved = userRepository.save(entity);
+        return userSaved.getUserId();
     }
 }
